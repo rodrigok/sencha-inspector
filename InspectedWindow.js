@@ -27,7 +27,19 @@ SenchaInspector.InspectedWindow = {
             
             var id, map, 
                 componentTree = [],
-            
+
+                sortComponents = function(components) {
+                    return components.sort(function(a, b) { 
+                        if(a.xclass < b.xclass) {
+                            return -1;
+                        }
+                        if(a.xclass > b.xclass) {
+                            return 1;
+                        }
+                        return 0;
+                    })
+                },
+                
                 mountComponent = function(cmp) {
                     var items = [],
                         result = {
@@ -40,6 +52,7 @@ SenchaInspector.InspectedWindow = {
                         cmp.items.each(function(item) {
                             items.push(mountComponent(item));
                         });
+                        items = sortComponents(items);
                         result.items = items;
                     }
                     
@@ -65,6 +78,7 @@ SenchaInspector.InspectedWindow = {
                 }
             }
 
+            componentTree = sortComponents(componentTree);
             return componentTree;
         }
         injectedGetComponentTree();
